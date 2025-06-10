@@ -3,6 +3,7 @@ package io.github.ninobomba.t4m.test.api.assured;
 import io.restassured.RestAssured;
 import io.restassured.filter.log.RequestLoggingFilter;
 import io.restassured.filter.log.ResponseLoggingFilter;
+import io.restassured.module.mockmvc.RestAssuredMockMvc;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -17,8 +18,6 @@ import org.springframework.test.web.servlet.MockMvc;
 import static io.restassured.RestAssured.given;
 import static org.hamcrest.Matchers.equalTo;
 
-import io.restassured.module.mockmvc.RestAssuredMockMvc;
-
 @AutoConfigureMockMvc
 @SpringBootTest ( webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT )
 public class TodoResourceTest {
@@ -31,7 +30,7 @@ public class TodoResourceTest {
 
 	@BeforeAll
 	static void config ( ) {
-		RestAssured.filters ( new RequestLoggingFilter ( ), new ResponseLoggingFilter ( ) );
+		RestAssured.filters ( new RequestLoggingFilter ( ) , new ResponseLoggingFilter ( ) );
 	}
 
 	@BeforeEach
@@ -43,16 +42,18 @@ public class TodoResourceTest {
 	void shouldGet_200 ( ) throws Exception {
 		var id = "1";
 		given ( )
-				.port ( port )
-				.header ( "Accept", MediaType.APPLICATION_JSON_VALUE )
-				.pathParam ( "id", id )
-				//
+				.baseUri ( "https://jsonplaceholder.typicode.com" )
+				.basePath ( "/todos" )
+				.header ( "Accept" , MediaType.APPLICATION_JSON_VALUE )
+				.header ( "Content-Type" , MediaType.APPLICATION_JSON_VALUE )
+				.pathParam ( "id" , id )
 				.when ( )
-				.get ( "https://jsonplaceholder.typicode.com/todos/{id}" )
-				//
+				.get ( "/{id}" )
 				.then ( )
 				.statusCode ( HttpStatus.OK.value ( ) )
-				.body ( "id", equalTo ( id ) );
+				.contentType ( MediaType.APPLICATION_JSON_VALUE )
+				.body ( "id" , equalTo ( Integer.parseInt ( id ) ) )
+				.body ( "completed" , org.hamcrest.Matchers.notNullValue ( ) );
 	}
 
 }

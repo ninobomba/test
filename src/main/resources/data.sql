@@ -1,31 +1,16 @@
-create schema if not exists demo;
+CREATE SCHEMA IF NOT EXISTS demo;
 
-USE demo;
-
-create table demo.USERS
+CREATE TABLE IF NOT EXISTS demo.USERS
 (
-    id         bigint auto_increment primary key,
-    username   varchar(50)                          not null,
-    email      varchar(100)                         not null,
-    password   varchar(255)                         not null,
-    first_name varchar(50)                          null,
-    last_name  varchar(50)                          null,
-    created_at timestamp  default CURRENT_TIMESTAMP null,
-    updated_at timestamp  default CURRENT_TIMESTAMP null,
-    active     tinyint(1) default 1                 null,
-    constraint email unique (email),
-    constraint username unique (username)
+    id         BIGINT AUTO_INCREMENT PRIMARY KEY,
+    username   VARCHAR(50)                         NOT NULL,
+    email      VARCHAR(100)                        NOT NULL,
+    password   VARCHAR(255)                        NOT NULL,
+    first_name VARCHAR(50)                         NULL,
+    last_name  VARCHAR(50)                         NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP NULL,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP NULL,
+    active     BOOLEAN   DEFAULT TRUE              NULL, -- Changed from tinyint(1) for better portability and clarity
+    CONSTRAINT UQ_DEMO_USERS_EMAIL UNIQUE (email),       -- Using a more descriptive constraint name
+    CONSTRAINT UQ_DEMO_USERS_USERNAME UNIQUE (username)  -- Using a more descriptive constraint name
 );
-
--- UserEntity data
-INSERT INTO demo.USERS (username, email, password, first_name, last_name)
-VALUES ('john_doe', 'john.doe@example.com', '$2a$10$xn3LI/AjqicFYZFruSwve.ODEPvjG0FwF3zzf0.fD97.VaO3vLC1C', 'John',
-        'Doe'),
-       ('jane_smith', 'jane.smith@example.com', '$2a$10$xn3LI/AjqicFYZFruSwve.ODEPvjG0FwF3zzf0.fD97.VaO3vLC1C', 'Jane',
-        'Smith'),
-       ('admin_user', 'admin@example.com', '$2a$10$xn3LI/AjqicFYZFruSwve.ODEPvjG0FwF3zzf0.fD97.VaO3vLC1C', 'Admin',
-        'UserEntity'),
-       ('mary_johnson', 'mary.johnson@example.com', '$2a$10$xn3LI/AjqicFYZFruSwve.ODEPvjG0FwF3zzf0.fD97.VaO3vLC1C',
-        'Mary', 'Johnson'),
-       ('robert_brown', 'robert.brown@example.com', '$2a$10$xn3LI/AjqicFYZFruSwve.ODEPvjG0FwF3zzf0.fD97.VaO3vLC1C',
-        'Robert', 'Brown');

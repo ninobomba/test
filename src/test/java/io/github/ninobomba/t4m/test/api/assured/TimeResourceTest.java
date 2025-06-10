@@ -1,16 +1,32 @@
 package io.github.ninobomba.t4m.test.api.assured;
 
-import io.github.ninobomba.t4m.test.api.TimeResource;
+import io.restassured.RestAssured;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.web.server.LocalServerPort;
 import org.springframework.http.MediaType;
+import org.springframework.test.web.servlet.MockMvc;
 
 import static io.restassured.RestAssured.given;
 import static org.hamcrest.Matchers.matchesPattern;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 
-@WebMvcTest ( TimeResource.class )
+@AutoConfigureMockMvc
+@SpringBootTest ( webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT )
 class TimeResourceTest {
+
+	@Autowired
+	private MockMvc mockMvc;
+
+	@LocalServerPort
+	private int port;
+
+	@BeforeEach
+	void setUp ( ) {
+		RestAssured.port = this.port;
+	}
 
 	@Test
 	public void testGetRequest ( ) {

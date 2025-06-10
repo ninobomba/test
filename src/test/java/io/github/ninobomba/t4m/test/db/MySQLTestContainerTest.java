@@ -14,6 +14,8 @@ import org.springframework.test.web.reactive.server.WebTestClient;
 import org.testcontainers.containers.MySQLContainer;
 import org.testcontainers.junit.jupiter.Testcontainers;
 
+import java.util.Collections;
+
 @AutoConfigureWebTestClient
 @Testcontainers
 @SpringBootTest ( webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT )
@@ -22,12 +24,15 @@ public class MySQLTestContainerTest {
 	@Autowired
 	WebTestClient webTestClient;
 
+	@Autowired
 	private IUserRepository iUserRepository;
 
 	static final MySQLContainer MY_SQL_CONTAINER;
 
 	static {
-		MY_SQL_CONTAINER = new MySQLContainer ( "mysql:9.3.0" );
+		MY_SQL_CONTAINER = new MySQLContainer ( "mysql:8.0.38" );
+		MY_SQL_CONTAINER.withTmpFs ( Collections.singletonMap ( "/var/lib/mysql" , "rw" ) );
+		MY_SQL_CONTAINER.withDatabaseName ( "demo" );
 		MY_SQL_CONTAINER.start ( );
 	}
 

@@ -17,49 +17,50 @@ import org.springframework.web.reactive.function.client.WebClient.ResponseSpec;
 import reactor.core.publisher.Mono;
 
 import static io.restassured.RestAssured.given;
+import static org.hamcrest.Matchers.greaterThan;
 import static org.hamcrest.Matchers.matchesPattern;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.when;
 
-@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
+@SpringBootTest ( webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT )
 class PokemonResourceTest {
 
-    @LocalServerPort
-    private int port;
+	@LocalServerPort
+	private int port;
 
-    @MockBean
-    private WebClient webClient;
+	@MockBean
+	private WebClient webClient;
 
-    @BeforeEach
-    public void setUp() {
-        RestAssured.port = port;
+	@BeforeEach
+	public void setUp ( ) {
+		RestAssured.port = port;
 
-        // Mock the WebClient response
-        String mockResponseBody = "{\"name\":\"ditto\",\"base_experience\":101,\"height\":3,\"weight\":40}";
-        HttpHeaders headers = new HttpHeaders();
-        headers.add("Content-Type", MediaType.APPLICATION_JSON_VALUE);
-        ResponseEntity<String> mockResponse = new ResponseEntity<>(mockResponseBody, headers, HttpStatus.OK);
+		// Mock the WebClient response
+		String mockResponseBody = "{\"name\":\"ditto\",\"base_experience\":101,\"height\":3,\"weight\":40}";
+		HttpHeaders headers = new HttpHeaders ( );
+		headers.add ( "Content-Type" , MediaType.APPLICATION_JSON_VALUE );
+		ResponseEntity < String > mockResponse = new ResponseEntity <> ( mockResponseBody , headers , HttpStatus.OK );
 
-        RequestHeadersUriSpec requestHeadersUriSpec = Mockito.mock(RequestHeadersUriSpec.class);
-        ResponseSpec responseSpec = Mockito.mock(ResponseSpec.class);
+		RequestHeadersUriSpec requestHeadersUriSpec = Mockito.mock ( RequestHeadersUriSpec.class );
+		ResponseSpec responseSpec = Mockito.mock ( ResponseSpec.class );
 
-        when(webClient.get()).thenReturn(requestHeadersUriSpec);
-        when(requestHeadersUriSpec.uri(anyString())).thenReturn(requestHeadersUriSpec);
-        when(requestHeadersUriSpec.retrieve()).thenReturn(responseSpec);
-        when(responseSpec.toEntity(String.class)).thenReturn(Mono.just(mockResponse));
-    }
+		when ( webClient.get ( ) ).thenReturn ( requestHeadersUriSpec );
+		when ( requestHeadersUriSpec.uri ( anyString ( ) ) ).thenReturn ( requestHeadersUriSpec );
+		when ( requestHeadersUriSpec.retrieve ( ) ).thenReturn ( responseSpec );
+		when ( responseSpec.toEntity ( String.class ) ).thenReturn ( Mono.just ( mockResponse ) );
+	}
 
 	@Test
-	public void testGetRequest() {
-		given()
-				.when()
-				.get("/pokemon")
-				.then()
-				.statusCode(200)
-				.contentType(MediaType.APPLICATION_JSON_VALUE)
-				.body("name", matchesPattern("ditto"))
-				.body("base_experience", org.hamcrest.Matchers.greaterThan(0))
-				.body("height", org.hamcrest.Matchers.greaterThan(0))
-				.body("weight", org.hamcrest.Matchers.greaterThan(0));
+	public void testGetRequest ( ) {
+		given ( )
+				.when ( )
+				.get ( "/pokemon" )
+				.then ( )
+				.statusCode ( 200 )
+				.contentType ( MediaType.APPLICATION_JSON_VALUE )
+				.body ( "name" , matchesPattern ( "ditto" ) )
+				.body ( "base_experience" , greaterThan ( 0 ) )
+				.body ( "height" , greaterThan ( 0 ) )
+				.body ( "weight" , greaterThan ( 0 ) );
 	}
 }
