@@ -12,6 +12,7 @@ import org.springframework.test.context.DynamicPropertyRegistry;
 import org.springframework.test.context.DynamicPropertySource;
 import org.springframework.test.web.reactive.server.WebTestClient;
 import org.testcontainers.containers.MySQLContainer;
+import org.testcontainers.junit.jupiter.Container;
 import org.testcontainers.junit.jupiter.Testcontainers;
 
 import java.util.Collections;
@@ -27,6 +28,7 @@ public class MySQLTestContainerTest {
 	@Autowired
 	private IUserRepository iUserRepository;
 
+	@Container
 	static final MySQLContainer MY_SQL_CONTAINER;
 
 	static {
