@@ -33,6 +33,7 @@ class PokemonResourceTest {
 
 	@BeforeEach
 	public void setUp ( ) {
+		RestAssured.reset ( );
 		RestAssured.port = port;
 
 		// Mock the WebClient response

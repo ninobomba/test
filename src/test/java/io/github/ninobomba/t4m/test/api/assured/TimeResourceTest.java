@@ -25,6 +25,7 @@ class TimeResourceTest {
 
 	@BeforeEach
 	void setUp ( ) {
+		RestAssured.reset ( );
 		RestAssured.port = this.port;
 	}
 
