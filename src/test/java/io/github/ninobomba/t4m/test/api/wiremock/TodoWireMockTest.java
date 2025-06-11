@@ -67,7 +67,7 @@ public class TodoWireMockTest {
 	public void setUp ( ) {
 		RestAssuredMockMvc.mockMvc ( mockMvc );
 	}
-	
+
 	@Test
 	void shouldGetJsonPlaceHolderMockPost_200 ( ) throws Exception {
 

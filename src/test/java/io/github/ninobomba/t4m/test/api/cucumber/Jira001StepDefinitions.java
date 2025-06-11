@@ -21,5 +21,5 @@ public class Jira001StepDefinitions {
 	public void it_should_return_the_first_todo_activity_od_the_day ( ) {
 		log.info ( "when - I query this end-point" );
 	}
-	
+
 }
